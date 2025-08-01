@@ -6,10 +6,8 @@ export default async function handler(req, res) {
   if (!user) return res.status(400).send("Usuário inválido.");
 
   if (!currentDuel) {
-    // Inicia duelo
     currentDuel = { user1: user, startedAt: Date.now() };
 
-    // Reseta após 30 segundos se ninguém aceitar
     duelTimeout = setTimeout(() => {
       currentDuel = null;
     }, 30000);
@@ -27,12 +25,35 @@ export default async function handler(req, res) {
   clearTimeout(duelTimeout);
   currentDuel = null;
 
+  const victoryMessages = [
+    "💥 {{winner}} derrotou {{loser}} com um golpe crítico!",
+    "⚔️ {{winner}} esquivou e contra-atacou! {{loser}} caiu!",
+    "☠️ {{loser}} subestimou {{winner}}... e pagou o preço.",
+    "🔪 {{winner}} venceu {{loser}} com estilo!",
+    "🔥 {{loser}} foi consumido pelas chamas da derrota de {{winner}}!",
+    "😺 {{loser}} tomou gap da yuumizinha de {{winner}} kkkkk!",
+  ];
+
+  const drawMessages = [
+    "🤝 {{user1}} e {{user2}} travaram um duelo épico... mas terminou em empate!",
+    "⚔️ {{user1}} e {{user2}} se enfrentaram com honra. Nenhum saiu vencedor.",
+    "🌀 O duelo entre {{user1}} e {{user2}} foi tão intenso que terminou em empate!",
+    "🎭 Ambos {{user1}} e {{user2}} recuaram ao mesmo tempo. Empate técnico!",
+  ];
+
   const rand = Math.random();
+  let message = "";
+
   if (rand < 0.33) {
-    return res.send(`/timeout ${user1} 60 ☠️ ${user2} venceu o duelo contra ${user1}!`);
+    const msg = victoryMessages[Math.floor(Math.random() * victoryMessages.length)];
+    message = `/timeout ${user1} 60 ` + msg.replace("{{winner}}", user2).replace("{{loser}}", user1);
   } else if (rand < 0.66) {
-    return res.send(`/timeout ${user2} 60 ☠️ ${user1} venceu o duelo contra ${user2}!`);
+    const msg = victoryMessages[Math.floor(Math.random() * victoryMessages.length)];
+    message = `/timeout ${user2} 60 ` + msg.replace("{{winner}}", user1).replace("{{loser}}", user2);
   } else {
-    return res.send(`⚔️ ${user1} e ${user2} empataram! Ambos sobreviveram... por enquanto. Ta`);
+    const msg = drawMessages[Math.floor(Math.random() * drawMessages.length)];
+    message = msg.replace("{{user1}}", user1).replace("{{user2}}", user2);
   }
+
+  return res.send(message);
 }
