@@ -31,13 +31,13 @@ export default async function handler(req, res) {
     "☠️ {{loser}} subestimou {{winner}}... e pagou o preço.",
     "🔪 {{winner}} venceu {{loser}} com estilo!",
     "🔥 {{loser}} foi consumido pelas chamas da derrota de {{winner}}!",
-    "😺 {{loser}} tomou gap da yuumizinha de {{winner}} kkkkk!",
+    "😺 {{loser}} tomou gap da Yuumizinha do(a) {{winner}} kkkkk!",
   ];
 
   const drawMessages = [
     "🤝 {{user1}} e {{user2}} travaram um duelo épico... mas terminou em empate!",
     "⚔️ {{user1}} e {{user2}} se enfrentaram com honra. Nenhum saiu vencedor.",
-    "🌀 O duelo entre {{user1}} e {{user2}} foi tão intenso que terminou em empate!",
+    "🔥 O duelo entre {{user1}} e {{user2}} foi tão intenso que terminou em empate!",
     "🎭 Ambos {{user1}} e {{user2}} recuaram ao mesmo tempo. Empate técnico!",
   ];
 
@@ -46,10 +46,10 @@ export default async function handler(req, res) {
 
   if (rand < 0.33) {
     const msg = victoryMessages[Math.floor(Math.random() * victoryMessages.length)];
-    message = `/timeout ${user1} 60 ` + msg.replace("{{winner}}", user2).replace("{{loser}}", user1);
+    message = `/timeout ${user1} 180 ` + msg.replace("{{winner}}", user2).replace("{{loser}}", user1);
   } else if (rand < 0.66) {
     const msg = victoryMessages[Math.floor(Math.random() * victoryMessages.length)];
-    message = `/timeout ${user2} 60 ` + msg.replace("{{winner}}", user1).replace("{{loser}}", user2);
+    message = `/timeout ${user2} 180 ` + msg.replace("{{winner}}", user1).replace("{{loser}}", user2);
   } else {
     const msg = drawMessages[Math.floor(Math.random() * drawMessages.length)];
     message = msg.replace("{{user1}}", user1).replace("{{user2}}", user2);
